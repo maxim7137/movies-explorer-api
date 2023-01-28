@@ -1,14 +1,43 @@
-const Card = require('../models/card');
+const Movie = require('../models/movie');
 const NotFoundError = require('../errors/notFound');
-const NoAccess = require('../errors/noAccess');
 const BadRequest = require('../errors/badRequest');
 
-module.exports.createCard = (req, res, next) => {
-  const { name, link } = req.body;
+module.exports.getMovies = (req, res, next) => {
+  Movie.find({})
+    .then((movies) => res.send(movies))
+    .catch(next);
+};
+
+module.exports.createMovie = (req, res, next) => {
+  const {
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+  } = req.body;
   const owner = req.user._id;
-  Card.create({ name, link, owner })
-    .then((card) => Card.populate(card, 'owner'))
-    .then((card) => res.send(card))
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner,
+  })
+    .then((movie) => res.send(movie))
     .catch((error) => {
       if (error.name === 'ValidationError') {
         next(new BadRequest(`${error.message.split('-')[1]}`));
@@ -18,70 +47,59 @@ module.exports.createCard = (req, res, next) => {
     });
 };
 
-module.exports.getCards = (req, res, next) => {
-  Card.find({})
-    .sort({ createdAt: -1 })
-    .populate(['owner', 'likes'])
-    .then((cards) => res.send(cards))
-    .catch(next);
-};
-
-module.exports.deleteCard = (req, res, next) => {
-  const { cardId } = req.params;
-  const userId = req.user._id;
-  Card.findById(cardId)
-    .orFail(new NotFoundError('Карточка с таким _id не найдена'))
-    .then((card) => {
-      if (!card.owner.equals(userId)) {
-        throw new NoAccess('Удалять можно только свои карточки');
-      } else {
-        card.delete();
-        res.send({ message: 'Пост удалён' });
-      }
+module.exports.deleteMovie = (req, res, next) => {
+  const { movieId } = req.params;
+  Movie.findById(movieId)
+    .orFail(new NotFoundError('Фильм с таким _id не найден'))
+    .then((movie) => {
+      movie.delete();
+      res.send({ message: 'Фильм удалён' });
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new BadRequest('Введен некорректный _id карточки'));
+        next(new BadRequest('Введен некорректный _id'));
       } else {
         next(error);
       }
     });
 };
 
-module.exports.likeCard = (req, res, next) =>
-  Card.findByIdAndUpdate(
-    req.params.cardId,
+/*
+module.exports.likeMovie = (req, res, next) =>
+  Movie.findByIdAndUpdate(
+    req.params.movieId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true }
   )
     .populate(['owner', 'likes'])
-    .orFail(new NotFoundError('Карточка с таким _id не найдена'))
-    .then((card) => {
-      res.send(card);
+    .orFail(new NotFoundError('Фильм с таким _id не найдена'))
+    .then((movie) => {
+      res.send(movie);
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new BadRequest('Введен некорректный _id карточки'));
+        next(new BadRequest('Введен некорректный _id'));
       } else {
         next(error);
       }
     });
 
-module.exports.dislikeCard = (req, res, next) =>
-  Card.findByIdAndUpdate(
-    req.params.cardId,
+module.exports.dislikeMovie = (req, res, next) =>
+  Movie.findByIdAndUpdate(
+    req.params.movieId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true }
   )
     .populate(['owner', 'likes'])
-    .orFail(new NotFoundError('Карточка с таким _id не найдена'))
-    .then((card) => {
-      res.send(card);
+    .orFail(new NotFoundError('Фильм с таким _id не найден'))
+    .then((movie) => {
+      res.send(movie);
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new BadRequest('Введен некорректный _id карточки'));
+        next(new BadRequest('Введен некорректный _id'));
       } else {
         next(error);
       }
     });
+ */

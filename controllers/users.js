@@ -1,19 +1,13 @@
-/* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+
 const NotFoundError = require('../errors/notFound');
 const Miss = require('../errors/miss');
 const Conflict = require('../errors/conflict');
 const BadRequest = require('../errors/badRequest');
 
 const { NODE_ENV, JWT_SECRET = 'dev-key' } = process.env;
-
-module.exports.getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => res.send(users))
-    .catch(next);
-};
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -30,32 +24,15 @@ module.exports.getUser = (req, res, next) => {
     });
 };
 
-module.exports.getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
-    .orFail(new NotFoundError('Пользователь по указанному _id не найден'))
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((error) => {
-      if (error.name === 'CastError') {
-        next(new BadRequest('Введен некорректный _id пользователя'));
-      } else {
-        next(error);
-      }
-    });
-};
-
 module.exports.createUser = (req, res, next) => {
-  const { email, password, name, about, avatar } = req.body;
+  const { email, password, name } = req.body;
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ email, password: hash, name, about, avatar }))
+    .then((hash) => User.create({ email, password: hash, name }))
     .then((user) =>
       res.send({
         email: user.email,
         name: user.name,
-        about: user.about,
-        avatar: user.avatar,
         _id: user._id,
         __v: user.__v,
       }))
@@ -70,33 +47,11 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
-module.exports.updateAvatar = (req, res, next) => {
-  const { avatar } = req.body;
-  User.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    { new: true, runValidators: true }
-  )
-    .orFail(new NotFoundError('Пользователь по указанному _id не найден'))
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((error) => {
-      if (error.name === 'CastError') {
-        next(new BadRequest('Введен некорректный _id пользователя'));
-      } else if (error.name === 'ValidationError') {
-        next(new BadRequest(`${error.message.split('-')[1]}`));
-      } else {
-        next(error);
-      }
-    });
-};
-
 module.exports.updateUser = (req, res, next) => {
-  const { name, about } = req.body;
+  const { email, name } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { name, about },
+    { email, name },
     { new: true, runValidators: true }
   )
     .orFail(new NotFoundError('Пользователь по указанному _id не найден'))
