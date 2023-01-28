@@ -2,6 +2,8 @@
   "extends": "airbnb-base",
   "rules": {
     "no-underscore-dangle": ["error", { "allow": ["_id", "__v"] }],
+    "object-shorthand": ["error", "properties"],
+    "func-names": ["error", "as-needed"],
     "object-curly-newline": ["error", { "consistent": true }],
     "import/no-unresolved": [1, { "commonjs": true }],
     "implicit-arrow-linebreak": "off",

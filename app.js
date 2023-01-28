@@ -1,5 +1,3 @@
-/* eslint-disable object-shorthand */
-/* eslint-disable func-names */
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -8,11 +6,9 @@ const helmet = require('helmet');
 const cors = require('cors');
 const { errors } = require('celebrate');
 
-/*
 const router = require('./routes'); // импорт роутов
 const { errorHandler } = require('./middlewares/errorHandler'); // импорт обработчика ошибок
 const { requestLogger, errorLogger } = require('./middlewares/logger'); // импорт логгеров
-*/
 
 const { DB = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 
@@ -21,7 +17,7 @@ const app = express();
 const whiteList = [
   'https://localhost:3000',
   'http://localhost:3000',
-  'localhost:3000'
+  'localhost:3000',
 ];
 
 const corsOptions = {
@@ -31,7 +27,7 @@ const corsOptions = {
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  }
+  },
 };
 
 app.use(cors(corsOptions));
@@ -49,14 +45,12 @@ app.use(limiter); // мидлвер для ограничения кол-во з
 app.use(helmet()); // мидлвер для для простановки security-заголовков, защ. от нек. уязвим.
 app.use(express.json()); // мидлвер для body
 
-/*
 app.use(requestLogger); // подключаем мидлвер логгер запросов
 app.use(router);
 app.use(errorLogger); // подключаем логгер ошибок
- */
 
 // здесь обрабатываем все ошибки
 app.use(errors()); // обработчик ошибок celebrate
-/* app.use(errorHandler); // свой обработчик ошибок */
+app.use(errorHandler); // свой обработчик ошибок
 
 module.exports = { app, DB };
