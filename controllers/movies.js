@@ -1,6 +1,7 @@
 const Movie = require('../models/movie');
 const NotFoundError = require('../errors/notFound');
 const BadRequest = require('../errors/badRequest');
+const NoAccess = require('../errors/noAccess');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
@@ -16,7 +17,7 @@ module.exports.createMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -30,7 +31,7 @@ module.exports.createMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -49,11 +50,16 @@ module.exports.createMovie = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
+  const userId = req.user._id;
   Movie.findById(movieId)
     .orFail(new NotFoundError('Фильм с таким _id не найден'))
     .then((movie) => {
-      movie.delete();
-      res.send({ message: 'Фильм удалён' });
+      if (!movie.owner.equals(userId)) {
+        throw new NoAccess('Удалять можно только фильмы добавленные вами');
+      } else {
+        movie.delete();
+        res.send({ message: 'Фильм удалён' });
+      }
     })
     .catch((error) => {
       if (error.name === 'CastError') {

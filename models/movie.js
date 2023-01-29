@@ -40,7 +40,7 @@ const movieSchema = new Schema({
   },
   trailerLink: {
     type: String,
-    required: [true, '-Ссылка на трейлер обязательна'],
+    required: [true, '-Ссылка на трейлер обязательна, схема'],
     validate: {
       validator(v) {
         return movieValidator.isURL(v);
