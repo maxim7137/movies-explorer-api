@@ -31,7 +31,7 @@ const corsOptions = {
   },
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // мидлвер для cors
 
 mongoose.set('strictQuery', false);
 mongoose.connect(DB);
