@@ -1,10 +1,10 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
-
 const { errors } = require('celebrate');
+
+const corsOptions = require('./middlewares/corsOptions');
 const { limiter } = require('./middlewares/limiter');
 const { errorHandler } = require('./middlewares/errorHandler'); // импорт обработчика ошибок
 const { requestLogger, errorLogger } = require('./middlewares/logger'); // импорт логгеров
@@ -13,25 +13,6 @@ const { DB } = require('./constants/devconstants');
 const router = require('./routes'); // импорт роутов
 
 const app = express();
-
-const whiteList = [
-  'https://localhost:3000',
-  'http://localhost:3000',
-  'localhost:3000',
-  'https://127.0.0.1:3000',
-  'http://127.0.0.1:3000',
-  '127.0.0.1:3000',
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
 
 app.use(cors(corsOptions)); // мидлвер для cors
 

@@ -2,6 +2,7 @@ const Movie = require('../models/movie');
 const NotFoundError = require('../errors/notFound');
 const BadRequest = require('../errors/badRequest');
 const NoAccess = require('../errors/noAccess');
+const { noMovieMessage } = require('../constants/messages');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
@@ -52,7 +53,7 @@ module.exports.deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
   const userId = req.user._id;
   Movie.findById(movieId)
-    .orFail(new NotFoundError('Фильм с таким _id не найден'))
+    .orFail(new NotFoundError(noMovieMessage))
     .then((movie) => {
       if (!movie.owner.equals(userId)) {
         throw new NoAccess('Удалять можно только фильмы добавленные вами');
