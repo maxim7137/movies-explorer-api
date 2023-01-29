@@ -2,7 +2,12 @@ const Movie = require('../models/movie');
 const NotFoundError = require('../errors/notFound');
 const BadRequest = require('../errors/badRequest');
 const NoAccess = require('../errors/noAccess');
-const { noMovieMessage } = require('../constants/messages');
+const {
+  noMovieMessage,
+  notMyMovieMessage,
+  deletedMovieMessage,
+  wrongIdMessage,
+} = require('../constants/messages');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
@@ -56,15 +61,15 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail(new NotFoundError(noMovieMessage))
     .then((movie) => {
       if (!movie.owner.equals(userId)) {
-        throw new NoAccess('Удалять можно только фильмы добавленные вами');
+        throw new NoAccess(notMyMovieMessage);
       } else {
         movie.delete();
-        res.send({ message: 'Фильм удалён' });
+        res.send({ message: deletedMovieMessage });
       }
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new BadRequest('Введен некорректный _id'));
+        next(new BadRequest(wrongIdMessage));
       } else {
         next(error);
       }

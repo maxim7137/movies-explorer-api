@@ -1,6 +1,25 @@
 const { celebrate, Joi } = require('celebrate');
 const preValidator = require('validator');
 const { isValidObjectId } = require('mongoose');
+const {
+  mailMessage,
+  mailRequiredMessage,
+  minPasswordMessage,
+  passwordRequiredMessage,
+  nameLengthMessage,
+  nameRequiredMessage,
+  wrongIdMessage,
+  requiredIdMessage,
+  countryRequiredMessage,
+  directorRequiredMessage,
+  durationRequiredMessage,
+  yearRequiredMessage,
+  descriptionRequiredMessage,
+  wrongLinkMessage,
+  linkRequiredMessage,
+  nameRURequiredMessage,
+  nameENRequiredMessage,
+} = require('../constants/messages');
 
 module.exports.validateRegUser = celebrate({
   body: Joi.object()
@@ -11,24 +30,24 @@ module.exports.validateRegUser = celebrate({
           if (preValidator.isEmail(value)) {
             return value;
           }
-          return helpers.message(
-            'Ведите почту, например: example@mail.com, Joi-custom'
-          );
+          return helpers.message(mailMessage);
         })
         .messages({
-          'any.required': 'Почта обязательна, Joi',
-          'string.custom':
-            'Ведите почту, например: example@mail.com, Joi-messages',
+          'any.required': mailRequiredMessage,
+          'string.empty': mailRequiredMessage,
+          'string.custom': mailMessage,
         }),
       password: Joi.string().min(6).required().messages({
-        'string.min': 'Пароль не менее 6 символов, Joi',
-        'any.required': 'Пароль обязателен, Joi',
+        'string.min': minPasswordMessage,
+        'any.required': passwordRequiredMessage,
+        'string.empty': passwordRequiredMessage,
       }),
       name: Joi.string().min(2).max(30).required()
         .messages({
-          'string.min': 'Имя от 2 до 30 символов, Joi',
-          'string.max': 'Имя от 2 до 30 символов, Joi',
-          'any.required': 'Имя обязательно, Joi',
+          'string.min': nameLengthMessage,
+          'string.max': nameLengthMessage,
+          'any.required': nameRequiredMessage,
+          'string.empty': nameRequiredMessage,
         }),
     })
     .unknown(),
@@ -43,18 +62,17 @@ module.exports.validateLoginUser = celebrate({
           if (preValidator.isEmail(value)) {
             return value;
           }
-          return helpers.message(
-            'Ведите почту, например: example@mail.com, Joi-custom'
-          );
+          return helpers.message(mailMessage);
         })
         .messages({
-          'any.required': 'Почта обязательна, Joi',
-          'string.custom':
-            'Ведите почту, например: example@mail.com, Joi-messages',
+          'any.required': mailRequiredMessage,
+          'string.empty': mailRequiredMessage,
+          'string.custom': mailMessage,
         }),
       password: Joi.string().min(6).required().messages({
-        'string.min': 'Пароль не менее 6 символов, Joi',
-        'any.required': 'Пароль обязателен, Joi',
+        'string.min': minPasswordMessage,
+        'any.required': passwordRequiredMessage,
+        'string.empty': passwordRequiredMessage,
       }),
     })
     .unknown(),
@@ -69,19 +87,20 @@ module.exports.validateUpdateUser = celebrate({
           if (preValidator.isEmail(value)) {
             return value;
           }
-          return helpers.message(
-            'Ведите почту, например: example@mail.com, Joi-custom'
-          );
+          return helpers.message(mailMessage);
         })
         .messages({
-          'any.required': 'Почта обязательна, Joi',
-          'string.custom':
-            'Ведите почту, например: example@mail.com, Joi-messages',
+          'any.required': mailRequiredMessage,
+          'string.empty': mailRequiredMessage,
+          'string.custom': mailMessage,
         }),
-      name: Joi.string().min(2).max(30).messages({
-        'string.min': 'Имя от 2 до 30 символов, Joi',
-        'string.max': 'Имя от 2 до 30 символов, Joi',
-      }),
+      name: Joi.string().min(2).max(30).required()
+        .messages({
+          'string.min': nameLengthMessage,
+          'string.max': nameLengthMessage,
+          'any.required': nameRequiredMessage,
+          'string.empty': nameRequiredMessage,
+        }),
     })
     .unknown(),
 });
@@ -95,10 +114,11 @@ module.exports.validateMovieId = celebrate({
           if (isValidObjectId(value)) {
             return value;
           }
-          return helpers.message('Id не из этой базы данных, Joi-custom');
+          return helpers.message(wrongIdMessage);
         })
         .messages({
-          'any.required': 'Необходимо указать id фильма, Joi',
+          'any.required': requiredIdMessage,
+          'string.empty': requiredIdMessage,
         }),
     })
     .unknown(),
@@ -108,19 +128,24 @@ module.exports.validateMovieCreate = celebrate({
   body: Joi.object()
     .keys({
       country: Joi.string().required().messages({
-        'any.required': 'Страна обязательна, Joi',
+        'any.required': countryRequiredMessage,
+        'string.empty': countryRequiredMessage,
       }),
       director: Joi.string().required().messages({
-        'any.required': 'Режиссёр обязателен, Joi',
+        'any.required': directorRequiredMessage,
+        'string.empty': directorRequiredMessage,
       }),
       duration: Joi.number().required().messages({
-        'any.required': 'Длительность обязательна, Joi',
+        'any.required': durationRequiredMessage,
+        'string.empty': durationRequiredMessage,
       }),
       year: Joi.number().required().messages({
-        'any.required': 'Год обязателен, Joi',
+        'any.required': yearRequiredMessage,
+        'string.empty': yearRequiredMessage,
       }),
       description: Joi.string().required().messages({
-        'any.required': 'Описание обязательно, Joi',
+        'any.required': descriptionRequiredMessage,
+        'string.empty': descriptionRequiredMessage,
       }),
       image: Joi.string()
         .required()
@@ -128,14 +153,12 @@ module.exports.validateMovieCreate = celebrate({
           if (preValidator.isURL(value)) {
             return value;
           }
-          return helpers.message(
-            'Ведите ссылку на постер, например: https://example.com/image.jpg, Joi-helpers'
-          );
+          return helpers.message(wrongLinkMessage);
         })
         .messages({
-          'any.required': 'Ссылка на постер обязательна, Joi',
-          'string.custom':
-            'Ведите ссылку на постер, например: https://example.com/image.jpg, Joi-messages',
+          'any.required': linkRequiredMessage,
+          'string.empty': linkRequiredMessage,
+          'string.custom': wrongLinkMessage,
         }),
       trailerLink: Joi.string()
         .required()
@@ -143,14 +166,12 @@ module.exports.validateMovieCreate = celebrate({
           if (preValidator.isURL(value)) {
             return value;
           }
-          return helpers.message(
-            'Ведите ссылку на трейлер, например: https://example.com/image.jpg, Joi-helpers'
-          );
+          return helpers.message(wrongLinkMessage);
         })
         .messages({
-          'any.required': 'Ссылка на трейлер обязательна, Joi',
-          'string.custom':
-            'Ведите ссылку на трейлер, например: https://example.com/image.jpg, Joi-messages',
+          'any.required': linkRequiredMessage,
+          'string.empty': linkRequiredMessage,
+          'string.custom': wrongLinkMessage,
         }),
       thumbnail: Joi.string()
         .required()
@@ -158,14 +179,12 @@ module.exports.validateMovieCreate = celebrate({
           if (preValidator.isURL(value)) {
             return value;
           }
-          return helpers.message(
-            'Ведите ссылку на миниатюрное изображение, например: https://example.com/image.jpg, Joi-helpers'
-          );
+          return helpers.message(wrongLinkMessage);
         })
         .messages({
-          'any.required': 'Ссылка на миниатюрное изображение, Joi',
-          'string.custom':
-            'Ведите ссылку на миниатюрное изображение, например: https://example.com/image.jpg, Joi-messages',
+          'any.required': linkRequiredMessage,
+          'string.empty': linkRequiredMessage,
+          'string.custom': wrongLinkMessage,
         }),
       owner: Joi.string()
         .required()
@@ -173,19 +192,23 @@ module.exports.validateMovieCreate = celebrate({
           if (isValidObjectId(value)) {
             return value;
           }
-          return helpers.message('Id не из этой базы данных, Joi-custom');
+          return helpers.message(wrongIdMessage);
         })
         .messages({
-          'any.required': 'Необходимо указать id фильма, Joi',
+          'any.required': requiredIdMessage,
+          'string.empty': requiredIdMessage,
         }),
       movieId: Joi.string().required().messages({
-        'any.required': 'id фильма обязателен, Joi',
+        'any.required': requiredIdMessage,
+        'string.empty': requiredIdMessage,
       }),
       nameRU: Joi.string().required().messages({
-        'any.required': 'название фильма на русском языке обязательно, Joi',
+        'any.required': nameRURequiredMessage,
+        'string.empty': nameRURequiredMessage,
       }),
       nameEN: Joi.string().required().messages({
-        'any.required': 'название фильма на английском языке обязательно, Joi',
+        'any.required': nameENRequiredMessage,
+        'string.empty': nameENRequiredMessage,
       }),
     })
     .unknown(),

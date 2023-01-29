@@ -4,60 +4,70 @@ const { Schema } = mongoose;
 
 const movieValidator = require('validator');
 
+const {
+  countryRequiredMessage,
+  directorRequiredMessage,
+  durationRequiredMessage,
+  yearRequiredMessage,
+  descriptionRequiredMessage,
+  linkRequiredMessage,
+  wrongLinkMessage,
+  requiredIdMessage,
+  nameENRequiredMessage,
+  nameRURequiredMessage,
+} = require('../constants/messages');
+
 const movieSchema = new Schema({
   country: {
     type: String,
-    required: [true, '-Страна обязательна'],
+    required: [true, `-${countryRequiredMessage}`],
   },
   director: {
     type: String,
-    required: [true, '-Режиссёр обязателен'],
+    required: [true, `-${directorRequiredMessage}`],
   },
   duration: {
     type: Number,
-    required: [true, '-Длительность обязательна'],
+    required: [true, `-${durationRequiredMessage}`],
   },
   year: {
     type: Number,
-    required: [true, '-Год обязателен'],
+    required: [true, `-${yearRequiredMessage}`],
   },
   description: {
     type: String,
-    required: [true, '-Описание обязательно'],
+    required: [true, `-${descriptionRequiredMessage}`],
   },
   image: {
     type: String,
-    required: [true, '-Ссылка на постер обязательна'],
+    required: [true, `-${linkRequiredMessage}`],
     validate: {
       // опишем свойство validate
       validator(v) {
         // validator - функция проверки данных. v - значение свойства age
         return movieValidator.isURL(v); // если нет, вернётся false
       },
-      message:
-        '-Ведите правильный URL для ссылки на постер, например: https://example.com', // когда validator вернёт false, будет использовано это сообщение
+      message: `-${wrongLinkMessage}`,
     },
   },
   trailerLink: {
     type: String,
-    required: [true, '-Ссылка на трейлер обязательна, схема'],
+    required: [true, `-${linkRequiredMessage}`],
     validate: {
       validator(v) {
         return movieValidator.isURL(v);
       },
-      message:
-        '-Ведите правильный URL для ссылки на трейлер, например: https://example.com',
+      message: `-${wrongLinkMessage}`,
     },
   },
   thumbnail: {
     type: String,
-    required: [true, '-Ссылка на миниатюрное изображение постера обязательна'],
+    required: [true, `-${linkRequiredMessage}`],
     validate: {
       validator(v) {
         return movieValidator.isURL(v);
       },
-      message:
-        '-Ведите правильный URL для ссылки на трейлер, например: https://example.com',
+      message: `-${wrongLinkMessage}`,
     },
   },
   owner: {
@@ -67,15 +77,15 @@ const movieSchema = new Schema({
   },
   movieId: {
     type: String,
-    required: [true, '-id фильма обязателен (MoviesExplorer)'],
+    required: [true, `-${requiredIdMessage}`],
   },
   nameRU: {
     type: String,
-    required: [true, '-название фильма на русском языке обязательно'],
+    required: [true, `-${nameRURequiredMessage}`],
   },
   nameEN: {
     type: String,
-    required: [true, '-название фильма на английском языке обязательно'],
+    required: [true, `-${nameENRequiredMessage}`],
   },
 });
 

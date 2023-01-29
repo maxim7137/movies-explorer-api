@@ -2,32 +2,42 @@ const mongoose = require('mongoose');
 
 const userValidator = require('validator');
 
+const {
+  conflictMessage,
+  mailRequiredMessage,
+  mailMessage,
+  passwordRequiredMessage,
+  minPasswordMessage,
+  nameRequiredMessage,
+  nameLengthMessage
+} = require('../constants/messages');
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    unique: [true, '-Пользователь с таким адресом уже зарегистрирован.'],
-    required: [true, '-Почта обязательна.'],
+    unique: [true, `-${conflictMessage}`],
+    required: [true, `-${mailRequiredMessage}`],
     validate: {
       // опишем свойство validate
       validator(v) {
-        // validator - функция проверки данных. v - значение свойства age
+        // validator - функция проверки данных. v - значение
         return userValidator.isEmail(v); // если нет, вернётся false
       },
-      message: '-Ведите почту, например: example@mail.com', // когда validator вернёт false, будет использовано это сообщение
+      message: `-${mailMessage}`, // когда validator вернёт false, будет использовано это сообщение
     },
   },
   password: {
     type: String,
-    required: [true, '-Пароль обязателен.'],
+    required: [true, `-${passwordRequiredMessage}`],
     select: false,
-    minlength: [6, `-Минимальная длина пароля 6 символов`],
+    minlength: [6, `-${minPasswordMessage}`],
   },
   name: {
     type: String,
-    required: [true, '-Имя обязательно.'],
-    minlength: [2, `-Ведите имя от 2 до 30 символов, введено {VALUE}.`],
-    maxlength: [30, `-Ведите имя от 2 до 30 символов, введено {VALUE}.`],
-  }
+    required: [true, `-${nameRequiredMessage}`],
+    minlength: [2, `-${nameLengthMessage}`],
+    maxlength: [30, `-${nameLengthMessage}`],
+  },
 });
 
 module.exports = mongoose.model('user', userSchema);
