@@ -8,10 +8,9 @@ const { errors } = require('celebrate');
 const { limiter } = require('./middlewares/limiter');
 const { errorHandler } = require('./middlewares/errorHandler'); // импорт обработчика ошибок
 const { requestLogger, errorLogger } = require('./middlewares/logger'); // импорт логгеров
+const { DB } = require('./constants/devconstants');
 
 const router = require('./routes'); // импорт роутов
-
-const { DB = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
@@ -19,6 +18,9 @@ const whiteList = [
   'https://localhost:3000',
   'http://localhost:3000',
   'localhost:3000',
+  'https://127.0.0.1:3000',
+  'http://127.0.0.1:3000',
+  '127.0.0.1:3000',
 ];
 
 const corsOptions = {

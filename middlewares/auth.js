@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Miss = require('../errors/miss');
 
-const { NODE_ENV, JWT_SECRET = 'dev-key' } = process.env;
+const { JWT_SECRET } = require('../constants/devconstants');
 
 module.exports.auth = (req, res, next) => {
   let payload; // объявляем переменную вне блока try catch
@@ -10,13 +10,12 @@ module.exports.auth = (req, res, next) => {
   try {
     // убеждаемся, что он есть или начинается с Bearer
     if (!authorization || !authorization.startsWith('Bearer ')) {
+      console.log(JWT_SECRET);
       throw new Miss('Необходима авторизация');
     } else {
+      console.log(JWT_SECRET);
       const token = authorization.replace('Bearer ', ''); // извлечём токен
-      payload = jwt.verify(
-        token,
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-key'
-      ); // верифицируем токен
+      payload = jwt.verify(token, JWT_SECRET); // верифицируем токен
     }
   } catch (error) {
     next(new Miss('Необходима авторизация'));

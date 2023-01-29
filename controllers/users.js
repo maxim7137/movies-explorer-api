@@ -7,7 +7,7 @@ const Miss = require('../errors/miss');
 const Conflict = require('../errors/conflict');
 const BadRequest = require('../errors/badRequest');
 
-const { NODE_ENV, JWT_SECRET = 'dev-key' } = process.env;
+const { JWT_SECRET } = require('../constants/devconstants');
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -89,7 +89,7 @@ module.exports.login = (req, res, next) => {
           // создадим токен
           const token = jwt.sign(
             { _id: user._id },
-            NODE_ENV === 'production' ? JWT_SECRET : 'dev-key',
+            JWT_SECRET,
             { expiresIn: '7d' }
           );
           // вернём токен
