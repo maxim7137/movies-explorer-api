@@ -1,13 +1,22 @@
 # movies-explorer-api
+
 Бэкенд сервиса, в котором можно найти фильмы по запросу и сохранить в личном кабинете
 
 ## Домены для диплома
-- max.nomoredomainsclub.ru		Фронтенд
-- api.max.nomoredomainsclub.ru	Бэкенд
+
+- max.nomoredomainsclub.ru      [Фронтенд](https://max.nomoredomainsclub.ru)
+- api.max.nomoredomainsclub.ru  [Бэкенд](https://api.max.nomoredomainsclub.ru)
 
 ### Эндпоинты
+
 |Метод|Эндпоинт|Назначение|
-|-----|--------|----------|
-|POST|<https://api.max.nomoredomainsclub.ru/signup>|регистрация нового пользователя|
-|POST|<https://api.max.nomoredomainsclub.ru/signin>|вход для зарегистрированного пользователя|
-|GET|<https://api.max.nomoredomainsclub.ru/signin>|вход для зарегистрированного пользователя|
+|-|-|-|
+|Роуты незащищенные авторизацией|
+|POST|/signup|регистрация нового пользователя|
+|POST|/signin|вход для зарегистрированного пользователя|
+|Роуты защищенные авторизацией|
+|GET|/users/me|возвращает информацию о пользователе|
+|PATCH|/users/me|обновляет информацию о пользователе|
+|GET|/movies|возвращает все сохранённые текущим  пользователем фильмы|
+|POST|/movies|создаёт фильм|
+|DELETE|/movies/_id|удаляет сохранённый фильм по id|
