@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "publish": "scp -r ./constants ./controllers ./errors ./middlewares ./models ./routes .env app.js package.json server.js maxim@62.84.126.94:/home/maxim/diplom/api"
   },
   "repository": {
     "type": "git",
