@@ -108,7 +108,7 @@ module.exports.validateUpdateUser = celebrate({
 module.exports.validateMovieId = celebrate({
   params: Joi.object()
     .keys({
-      movieId: Joi.string()
+      movieId: Joi.number()
         .required()
         .custom((value, helpers) => {
           if (isValidObjectId(value)) {
@@ -198,7 +198,7 @@ module.exports.validateMovieCreate = celebrate({
           'any.required': requiredIdMessage,
           'string.empty': requiredIdMessage,
         }),
-      movieId: Joi.string().required().messages({
+      movieId: Joi.number().required().messages({
         'any.required': requiredIdMessage,
         'string.empty': requiredIdMessage,
       }),
