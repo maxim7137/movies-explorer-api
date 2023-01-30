@@ -19,11 +19,10 @@ app.use(cors(corsOptions)); // мидлвер для cors
 mongoose.set('strictQuery', false);
 mongoose.connect(DB);
 
+app.use(requestLogger); // подключаем мидлвер логгер запросов
 app.use(limiter); // мидлвер для ограничения кол-во запросов. Для защиты от DoS-атак.
 app.use(helmet()); // мидлвер для для простановки security-заголовков, защ. от нек. уязвим.
 app.use(express.json()); // мидлвер для body
-
-app.use(requestLogger); // подключаем мидлвер логгер запросов
 app.use(router); // единый роут подключается в файле app.js
 app.use(errorLogger); // подключаем логгер ошибок
 
