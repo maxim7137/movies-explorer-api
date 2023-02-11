@@ -105,7 +105,7 @@ module.exports.validateUpdateUser = celebrate({
     .unknown(),
 });
 
-/* module.exports.validateMovieId = celebrate({
+module.exports.validateMovieId = celebrate({
   params: Joi.object()
     .keys({
       movieId: Joi.string()
@@ -122,7 +122,7 @@ module.exports.validateUpdateUser = celebrate({
         }),
     })
     .unknown(),
-}); */
+});
 
 module.exports.validateMovieCreate = celebrate({
   body: Joi.object()
