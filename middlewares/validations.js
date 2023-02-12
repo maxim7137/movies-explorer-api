@@ -105,7 +105,7 @@ module.exports.validateUpdateUser = celebrate({
     .unknown(),
 });
 
-module.exports.validateMovieId = celebrate({
+/* module.exports.validateMovieId = celebrate({
   params: Joi.object()
     .keys({
       movieId: Joi.string()
@@ -122,7 +122,7 @@ module.exports.validateMovieId = celebrate({
         }),
     })
     .unknown(),
-});
+}); */
 
 module.exports.validateMovieCreate = celebrate({
   body: Joi.object()
@@ -198,7 +198,7 @@ module.exports.validateMovieCreate = celebrate({
           'any.required': requiredIdMessage,
           'string.empty': requiredIdMessage,
         }),
-      movieId: Joi.string().required().messages({
+      movieId: Joi.number().required().messages({
         'any.required': requiredIdMessage,
         'string.empty': requiredIdMessage,
       }),
