@@ -65,7 +65,9 @@ module.exports.updateUser = (req, res, next) => {
       res.send(user);
     })
     .catch((error) => {
-      if (error.name === 'CastError') {
+      if (error.code === 11000) {
+        next(new Conflict(conflictMessage));
+      } else if (error.name === 'CastError') {
         next(new BadRequest(wrongIdMessage));
       } else if (error.name === 'ValidationError') {
         next(new BadRequest(`${error.message.split('-')[1]}`));
