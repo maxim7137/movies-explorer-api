@@ -42,13 +42,12 @@ module.exports.validateRegUser = celebrate({
         'any.required': passwordRequiredMessage,
         'string.empty': passwordRequiredMessage,
       }),
-      name: Joi.string().min(2).max(30).required()
-        .messages({
-          'string.min': nameLengthMessage,
-          'string.max': nameLengthMessage,
-          'any.required': nameRequiredMessage,
-          'string.empty': nameRequiredMessage,
-        }),
+      name: Joi.string().min(2).max(30).required().messages({
+        'string.min': nameLengthMessage,
+        'string.max': nameLengthMessage,
+        'any.required': nameRequiredMessage,
+        'string.empty': nameRequiredMessage,
+      }),
     })
     .unknown(),
 });
@@ -94,13 +93,12 @@ module.exports.validateUpdateUser = celebrate({
           'string.empty': mailRequiredMessage,
           'string.custom': mailMessage,
         }),
-      name: Joi.string().min(2).max(30).required()
-        .messages({
-          'string.min': nameLengthMessage,
-          'string.max': nameLengthMessage,
-          'any.required': nameRequiredMessage,
-          'string.empty': nameRequiredMessage,
-        }),
+      name: Joi.string().min(2).max(30).required().messages({
+        'string.min': nameLengthMessage,
+        'string.max': nameLengthMessage,
+        'any.required': nameRequiredMessage,
+        'string.empty': nameRequiredMessage,
+      }),
     })
     .unknown(),
 });
@@ -185,18 +183,6 @@ module.exports.validateMovieCreate = celebrate({
           'any.required': linkRequiredMessage,
           'string.empty': linkRequiredMessage,
           'string.custom': wrongLinkMessage,
-        }),
-      owner: Joi.string()
-        .required()
-        .custom((value, helpers) => {
-          if (isValidObjectId(value)) {
-            return value;
-          }
-          return helpers.message(wrongIdMessage);
-        })
-        .messages({
-          'any.required': requiredIdMessage,
-          'string.empty': requiredIdMessage,
         }),
       movieId: Joi.number().required().messages({
         'any.required': requiredIdMessage,
