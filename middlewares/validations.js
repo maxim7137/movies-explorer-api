@@ -42,12 +42,13 @@ module.exports.validateRegUser = celebrate({
         'any.required': passwordRequiredMessage,
         'string.empty': passwordRequiredMessage,
       }),
-      name: Joi.string().min(2).max(30).required().messages({
-        'string.min': nameLengthMessage,
-        'string.max': nameLengthMessage,
-        'any.required': nameRequiredMessage,
-        'string.empty': nameRequiredMessage,
-      }),
+      name: Joi.string().min(2).max(30).required()
+        .messages({
+          'string.min': nameLengthMessage,
+          'string.max': nameLengthMessage,
+          'any.required': nameRequiredMessage,
+          'string.empty': nameRequiredMessage,
+        }),
     })
     .unknown(),
 });
@@ -93,12 +94,13 @@ module.exports.validateUpdateUser = celebrate({
           'string.empty': mailRequiredMessage,
           'string.custom': mailMessage,
         }),
-      name: Joi.string().min(2).max(30).required().messages({
-        'string.min': nameLengthMessage,
-        'string.max': nameLengthMessage,
-        'any.required': nameRequiredMessage,
-        'string.empty': nameRequiredMessage,
-      }),
+      name: Joi.string().min(2).max(30).required()
+        .messages({
+          'string.min': nameLengthMessage,
+          'string.max': nameLengthMessage,
+          'any.required': nameRequiredMessage,
+          'string.empty': nameRequiredMessage,
+        }),
     })
     .unknown(),
 });
