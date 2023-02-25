@@ -186,18 +186,6 @@ module.exports.validateMovieCreate = celebrate({
           'string.empty': linkRequiredMessage,
           'string.custom': wrongLinkMessage,
         }),
-      owner: Joi.string()
-        .required()
-        .custom((value, helpers) => {
-          if (isValidObjectId(value)) {
-            return value;
-          }
-          return helpers.message(wrongIdMessage);
-        })
-        .messages({
-          'any.required': requiredIdMessage,
-          'string.empty': requiredIdMessage,
-        }),
       movieId: Joi.number().required().messages({
         'any.required': requiredIdMessage,
         'string.empty': requiredIdMessage,
