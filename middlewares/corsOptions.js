@@ -13,6 +13,7 @@ const whiteList = [
   'https://127.0.0.1',
   'http://127.0.0.1',
   '127.0.0.1',
+  'https://max.nomoredomainsclub.ru',
 ];
 
 const corsOptions = {
